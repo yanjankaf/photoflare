@@ -598,7 +598,8 @@ void PaintWidget::init()
 
 PaintWidget::~PaintWidget()
 {
-    d->disconnectLastTool();
+    if (d->currentTool)
+        d->disconnectLastTool();
     delete d;
 }
 
