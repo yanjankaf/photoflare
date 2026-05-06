@@ -99,6 +99,7 @@
 #include "workers/filterworkermp.h"
 #include "workers/FloodFillWorker.h"
 
+#include <QTranslator>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "plugins/PluginManager.h"
@@ -125,7 +126,8 @@
 
 namespace
 {
-    const QString UNTITLED_TAB_NAME = QObject::tr("Untitled");
+    // Evaluated at each call site so it picks up live language changes
+    inline QString untitledTabName() { return QObject::tr("Untitled"); }
 }
 
 MainWindow::MainWindow() :
@@ -241,6 +243,9 @@ void MainWindow::setupWorkspace()
     // Pointer tool selected by default
     // (overridden in restoreGeometryState if a saved tool exists)
     on_toolButtonPointer_clicked();
+
+    // Load the translator now that the window is constructed
+    loadTranslator(SETTINGS->getUserLanguage());
 }
 
 void MainWindow::addZoomCombo()
@@ -1029,7 +1034,7 @@ void MainWindow::saveContent()
 {
     QString currentFileName = ui->mdiArea->currentSubWindow()->windowTitle();
 
-    if(currentFileName.contains(UNTITLED_TAB_NAME + " [*]"))
+    if(currentFileName.contains(untitledTabName() + " [*]"))
     {
         on_actionSave_As_triggered();
     }
@@ -2370,14 +2375,42 @@ void MainWindow::batchProcess_batchProgress(int index,int total)
 void MainWindow::on_actionPreferences_triggered()
 {
     prefsDialog = new PrefsDialog(this);
-    QObject::connect(prefsDialog, SIGNAL(safeQuitApp()), this, SLOT(onSafeQuitApp()));
     QObject::connect(prefsDialog, SIGNAL(iconThemeChanged()), this, SLOT(applyIconTheme()));
+    QObject::connect(prefsDialog, &PrefsDialog::languageChanged, this, &MainWindow::onLanguageChanged);
     prefsDialog->show();
 }
 
-void MainWindow::onSafeQuitApp()
+void MainWindow::loadTranslator(const QString &langCode)
 {
-    on_actionQuit_triggered();
+    if (m_translator) {
+        qApp->removeTranslator(m_translator);
+        delete m_translator;
+    }
+    m_translator = new QTranslator(this);
+    QStringList paths = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);
+    paths.prepend(QCoreApplication::applicationDirPath());
+    for (int i = 0; i < paths.length(); i++) {
+        QFileInfo check_file(paths[i] + "/languages/" + langCode + ".qm");
+        if (check_file.exists() && check_file.isFile()) {
+            m_translator->load(langCode + ".qm", paths[i] + "/languages/");
+            break;
+        }
+    }
+    qApp->installTranslator(m_translator);
+}
+
+void MainWindow::onLanguageChanged(const QString &langCode)
+{
+    loadTranslator(langCode);
+}
+
+void MainWindow::changeEvent(QEvent *e)
+{
+    QMainWindow::changeEvent(e);
+    if (e->type() == QEvent::LanguageChange) {
+        ui->retranslateUi(this);
+        batchLbl->setText(tr("Ready"));
+    }
 }
 
 void MainWindow::on_actionPlugins_triggered()
@@ -3143,7 +3176,7 @@ void MainWindow::addChildWindow(PaintWidget *widget)
     ui->mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     ui->mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     QMdiSubWindow *mdiSubWindow = ui->mdiArea->addSubWindow(widget);
-    QString title = widget->imagePath().isEmpty() ? UNTITLED_TAB_NAME : widget->imagePath();
+    QString title = widget->imagePath().isEmpty() ? untitledTabName() : widget->imagePath();
     title = title + " [*]";
     mdiSubWindow->setWindowTitle(title);
     mdiSubWindow->installEventFilter(this);

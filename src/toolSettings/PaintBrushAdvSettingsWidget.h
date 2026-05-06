@@ -45,6 +45,9 @@ public:
 signals:
     void settingsChanged();
 
+protected:
+    void changeEvent(QEvent *e) override;
+
 private:
     Ui::PaintBrushAdvSettingsWidget *ui;
 };

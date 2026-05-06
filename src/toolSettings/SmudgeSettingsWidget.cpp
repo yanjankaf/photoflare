@@ -36,6 +36,13 @@ SmudgeSettingsWidget::~SmudgeSettingsWidget()
     delete ui;
 }
 
+void SmudgeSettingsWidget::changeEvent(QEvent *e)
+{
+    QWidget::changeEvent(e);
+    if (e->type() == QEvent::LanguageChange)
+        ui->retranslateUi(this);
+}
+
 int SmudgeSettingsWidget::radius() const
 {
     return ui->radiusSpinBox->value();

@@ -24,6 +24,7 @@
 #include <QNetworkReply>
 #include <QHash>
 #include <QSettings>
+#include <QTranslator>
 #include <functional>
 
 #include "dialogs/batchdialog.h"
@@ -254,10 +255,11 @@ private slots:
     void getNextZoomFromScale(QString scaletext);
     void getPrevZoomFromScale(QString scaletext);
 
-    void onSafeQuitApp();
+    void onLanguageChanged(const QString &langCode);
 
 protected:
     void closeEvent(QCloseEvent *event);
+    void changeEvent(QEvent *e) override;
     bool eventFilter(QObject * obj, QEvent * e);
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dropEvent(QDropEvent *event) override;
@@ -286,6 +288,7 @@ private:
 
     void loadPlugins();
     void showFilterDialog(IFilterPlugin* plugin);
+    void loadTranslator(const QString &langCode);
     QMenu* ensureMenuPath(const QString& path);
     QVariantMap collectParams(IFilterPlugin* plugin,
                               const QHash<QString, QWidget*>& widgets);
@@ -311,6 +314,7 @@ private:
     QLabel *imagesizeLbl;
     QLabel *selectionLbl;
 
+    QTranslator *m_translator = nullptr;
     PluginManager* m_pluginManager = nullptr;
     QImage         m_pluginImageCache;
     QHash<QString, QSettings*> m_pluginSettings;

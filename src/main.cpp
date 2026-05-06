@@ -19,7 +19,6 @@
 
 //#include <QDebug>
 
-#include <QTranslator>
 #include <QtSingleApplication>
 #include <QStandardPaths>
 #include <QDir>
@@ -147,21 +146,6 @@ int main(int argc, char *argv[])
                 lang = "en";
             }
             SETTINGS->setUserLanguage(lang);
-        }
-
-        QTranslator translator;
-        app.installTranslator(&translator);
-
-        QStringList paths = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);
-        paths.prepend(QCoreApplication::applicationDirPath());
-        for(int i = 0;i < paths.length(); i++)
-        {
-            QFileInfo check_file(paths[i]+"/languages/"+SETTINGS->getUserLanguage()+".qm");
-            if(check_file.exists() && check_file.isFile())
-            {
-                translator.load(SETTINGS->getUserLanguage()+".qm", paths[i]+"/languages/");
-                break;
-            }
         }
 
         MainWindow w;

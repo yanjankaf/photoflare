@@ -18,7 +18,6 @@
 // Preferences dialog class.
 
 #include <QFileDialog>
-#include <QProcess>
 #include <QStandardPaths>
 #include <QDesktopServices>
 
@@ -152,7 +151,6 @@ PrefsDialog::PrefsDialog(QWidget *parent) :
     else if(SETTINGS->getUserLanguage() == "tr")
         ui->comboBoxLanguage->setCurrentIndex(15);
 
-    ui->restartButton->hide();
 }
 
 PrefsDialog::~PrefsDialog()
@@ -200,8 +198,11 @@ void PrefsDialog::on_buttonBox_accepted()
     if (ui->checkBox->isChecked() != SETTINGS->isMultiWindowMode())
         SETTINGS->setMultiWindowMode(ui->checkBox->isChecked());
 
-    // Save language when we close the dialog
+    // Save language when we close the dialog; switch live if it changed
+    const QString oldLang = SETTINGS->getUserLanguage();
     set_user_language();
+    if (SETTINGS->getUserLanguage() != oldLang)
+        emit languageChanged(SETTINGS->getUserLanguage());
 }
 
 void PrefsDialog::on_buttonBox_rejected()
@@ -249,21 +250,6 @@ void PrefsDialog::on_historySlider_valueChanged(int value)
 {
     QString val = QString::number(value);
     ui->history_value->setText(val);
-}
-
-void PrefsDialog::on_restartButton_clicked()
-{
-    // Save language before we quit
-    set_user_language();
-
-    // Use safe quit to allow saving/closing files before restarting
-    emit safeQuitApp();
-    QProcess::startDetached(QCoreApplication::applicationFilePath());
-}
-
-void PrefsDialog::on_comboBoxLanguage_currentIndexChanged()
-{
-    ui->restartButton->show();
 }
 
 void PrefsDialog::set_user_language()

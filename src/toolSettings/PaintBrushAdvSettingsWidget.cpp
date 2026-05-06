@@ -45,6 +45,13 @@ PaintBrushAdvSettingsWidget::~PaintBrushAdvSettingsWidget()
     delete ui;
 }
 
+void PaintBrushAdvSettingsWidget::changeEvent(QEvent *e)
+{
+    QWidget::changeEvent(e);
+    if (e->type() == QEvent::LanguageChange)
+        ui->retranslateUi(this);
+}
+
 QPixmap PaintBrushAdvSettingsWidget::brushPixmap()
 {
     return ui->comboBox->itemData(ui->comboBox->currentIndex(), Qt::UserRole).value<QPixmap>();

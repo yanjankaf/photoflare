@@ -44,6 +44,13 @@ StampSettingsWidget::~StampSettingsWidget()
     delete ui;
 }
 
+void StampSettingsWidget::changeEvent(QEvent *e)
+{
+    QWidget::changeEvent(e);
+    if (e->type() == QEvent::LanguageChange)
+        ui->retranslateUi(this);
+}
+
 int StampSettingsWidget::radius() const
 {
     return ui->radiusSpinBox->value();

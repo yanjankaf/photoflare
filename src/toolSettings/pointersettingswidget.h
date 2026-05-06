@@ -51,6 +51,9 @@ private slots:
     void on_checkBoxFill_clicked(bool checked);
     void on_strokeWidth_valueChanged(int width);
 
+protected:
+    void changeEvent(QEvent *e) override;
+
 private:
     Ui::PointerSettingsWidget *ui;
 };

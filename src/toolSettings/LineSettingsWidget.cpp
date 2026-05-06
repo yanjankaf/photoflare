@@ -49,6 +49,13 @@ LineSettingsWidget::~LineSettingsWidget()
     delete ui;
 }
 
+void LineSettingsWidget::changeEvent(QEvent *e)
+{
+    QWidget::changeEvent(e);
+    if (e->type() == QEvent::LanguageChange)
+        ui->retranslateUi(this);
+}
+
 int LineSettingsWidget::width()
 {
     return ui->widthSpinBox->value();

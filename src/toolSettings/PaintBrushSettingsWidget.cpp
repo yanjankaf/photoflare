@@ -41,6 +41,13 @@ PaintBrushSettingsWidget::~PaintBrushSettingsWidget()
     delete ui;
 }
 
+void PaintBrushSettingsWidget::changeEvent(QEvent *e)
+{
+    QWidget::changeEvent(e);
+    if (e->type() == QEvent::LanguageChange)
+        ui->retranslateUi(this);
+}
+
 void PaintBrushSettingsWidget::setAntialiasing(bool value)
 {
     ui->cbAntialias->setChecked(value);

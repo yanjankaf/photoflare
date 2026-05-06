@@ -33,6 +33,13 @@ EraserSettingsWidget::~EraserSettingsWidget()
     delete ui;
 }
 
+void EraserSettingsWidget::changeEvent(QEvent *e)
+{
+    QWidget::changeEvent(e);
+    if (e->type() == QEvent::LanguageChange)
+        ui->retranslateUi(this);
+}
+
 int EraserSettingsWidget::radius() const
 {
     return ui->radiusSlider->value();

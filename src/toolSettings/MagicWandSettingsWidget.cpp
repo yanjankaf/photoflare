@@ -36,6 +36,13 @@ MagicWandSettingsWidget::~MagicWandSettingsWidget()
     delete ui;
 }
 
+void MagicWandSettingsWidget::changeEvent(QEvent *e)
+{
+    QWidget::changeEvent(e);
+    if (e->type() == QEvent::LanguageChange)
+        ui->retranslateUi(this);
+}
+
 int MagicWandSettingsWidget::tolerance() const
 {
     return ui->toleranceSpinBox->value();

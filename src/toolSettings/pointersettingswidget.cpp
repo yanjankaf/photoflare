@@ -35,6 +35,13 @@ PointerSettingsWidget::~PointerSettingsWidget()
     delete ui;
 }
 
+void PointerSettingsWidget::changeEvent(QEvent *e)
+{
+    QWidget::changeEvent(e);
+    if (e->type() == QEvent::LanguageChange)
+        ui->retranslateUi(this);
+}
+
 bool PointerSettingsWidget::stroke() const
 {
     return ui->checkBoxStroke->isChecked();

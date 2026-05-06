@@ -51,6 +51,9 @@ private slots:
     void on_buttonSquareCap_clicked();
     void on_pressureSlider_valueChanged(int value);
 
+protected:
+    void changeEvent(QEvent *e) override;
+
 private:
     void setLabelRadiusValue(int value);
     Ui::PaintBrushSettingsWidget *ui;

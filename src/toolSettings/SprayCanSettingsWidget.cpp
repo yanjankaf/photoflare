@@ -38,6 +38,13 @@ SprayCanSettingsWidget::~SprayCanSettingsWidget()
     delete ui;
 }
 
+void SprayCanSettingsWidget::changeEvent(QEvent *e)
+{
+    QWidget::changeEvent(e);
+    if (e->type() == QEvent::LanguageChange)
+        ui->retranslateUi(this);
+}
+
 int SprayCanSettingsWidget::radius() const
 {
     return ui->radiusSpinBox->value();

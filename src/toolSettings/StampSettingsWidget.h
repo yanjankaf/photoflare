@@ -49,6 +49,9 @@ signals:
 private slots:
     void onFixedChanged();
 
+protected:
+    void changeEvent(QEvent *e) override;
+
 private:
     Ui::StampSettingsWidget *ui;
 };

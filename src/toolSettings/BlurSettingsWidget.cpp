@@ -36,6 +36,13 @@ BlurSettingsWidget::~BlurSettingsWidget()
     delete ui;
 }
 
+void BlurSettingsWidget::changeEvent(QEvent *e)
+{
+    QWidget::changeEvent(e);
+    if (e->type() == QEvent::LanguageChange)
+        ui->retranslateUi(this);
+}
+
 int BlurSettingsWidget::radius() const
 {
     return ui->radiusSpinBox->value();
