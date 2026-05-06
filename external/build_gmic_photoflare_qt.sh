@@ -57,6 +57,7 @@ APT_PACKAGES=(
     make
     wget
     qt6-base-dev
+    qt6-tools-dev
     qt6-tools-dev-tools
     libfftw3-dev
     libcurl4-openssl-dev
@@ -119,6 +120,20 @@ else
     echo "  gmic_stdlib_community.h already present, skipping."
 fi
 echo ""
+
+# Ensure lrelease (Qt6) is on PATH — on Ubuntu it lives in /usr/lib/qt6/bin/
+# but is not symlinked to /usr/bin. The gmic-qt translations Makefile needs it.
+if ! command -v lrelease &>/dev/null && ! command -v lrelease-qt5 &>/dev/null; then
+    QT6_LRELEASE=$(find /usr/lib/qt6/bin /usr/lib/x86_64-linux-gnu/qt6/bin \
+                        /opt/qt6/bin /usr/local/lib/qt6/bin \
+                        -name "lrelease" 2>/dev/null | head -1)
+    if [[ -n "$QT6_LRELEASE" ]]; then
+        echo "  Adding $(dirname "$QT6_LRELEASE") to PATH for lrelease"
+        export PATH="$(dirname "$QT6_LRELEASE"):$PATH"
+    else
+        echo "WARNING: lrelease not found — gmic-qt translation files may fail to build."
+    fi
+fi
 
 CMAKE_EXTRA_ARGS=()
 if [[ -n "$QT_PREFIX" ]]; then
