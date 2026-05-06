@@ -27,10 +27,10 @@ Information on current features and how to use the application will be
 - qt6-base-dev
 
 #### Ubuntu (24.04)  
-`sudo apt-get install libgraphicsmagick++1-dev libc6-dev libqt6core6t64 libqt6gui6t64 libqt6widgets6t64 libomp-dev qt6-base-dev qtcreator`
+`sudo apt-get install g++ libgraphicsmagick++1-dev libc6-dev libqt6core6t64 libqt6gui6t64 libqt6widgets6t64 libomp-dev qt6-base-dev qtcreator`
 
 #### Ubuntu (26.04)
-`sudo apt-get install libgraphicsmagick++1-dev libc6-dev libqt6core6 libqt6gui6 libqt6widgets6 libomp-21-dev qt6-base-dev qtcreator`
+`sudo apt-get install g++ libgraphicsmagick++1-dev libc6-dev libqt6core6 libqt6gui6 libqt6widgets6 libomp-21-dev qt6-base-dev qtcreator`
 
 Compile using either by opening the .pro file with Qt Creator or use qmake passing the .pro file as a parameter. 
 
