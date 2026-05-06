@@ -33,3 +33,37 @@ parts:
       - libomp5-18
       - libqt6printsupport6
       - qt6-image-formats-plugins
+
+  gmic-qt:
+    source: https://github.com/c-koi/gmic-qt.git
+    source-type: git
+    source-tag: v.3.4.2
+    source-commit: aa4a6f4ab174b37fcdf4df5f94fde0898856523a
+    plugin: cmake
+    cmake-parameters:
+      - -DBUILD_WITH_QT6=ON
+      - -DGMIC_QT_HOST=none
+      - -DENABLE_SYSTEM_GMIC=OFF
+      - -DENABLE_FFTW3=ON
+      - -DENABLE_CURL=ON
+      - -DCMAKE_BUILD_TYPE=Release
+    override-pull: |
+      craftctl default
+      # Clone the matching G'MIC source one level above the gmic-qt checkout so
+      # that gmic-qt's CMakeLists default GMIC_PATH (../gmic/src) resolves correctly.
+      git clone --depth 1 --branch v.3.7.5 \
+        https://github.com/GreycLab/gmic.git \
+        $CRAFT_PART_SRC/../gmic
+    build-packages:
+      - cmake
+      - qt6-base-dev
+      - qt6-tools-dev-tools
+      - libfftw3-dev
+      - libcurl4-openssl-dev
+      - libomp-dev
+    override-build: |
+      craftctl default
+      mv $CRAFT_PART_INSTALL/usr/bin/gmic_qt $CRAFT_PART_INSTALL/usr/bin/gmic_photoflare_qt
+    stage-packages:
+      - libfftw3-double3
+      - libomp5-18

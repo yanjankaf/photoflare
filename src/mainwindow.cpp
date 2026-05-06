@@ -2146,20 +2146,28 @@ void MainWindow::on_actionGmicQt_triggered()
     // Output temp file
     const QString outputPath = inputPath + "_out.png";
 
-    // Locate gmic_qt binary: first check next to the application executable,
-    // then fall back to PATH (common on Linux/macOS where it may be system-installed).
+    // Locate the gmic-qt binary. Check next to the application executable first
+    // (preferred, namespaced name), then fall back to PATH.
+    // On Windows the build bat renames the output to gmic_photoflare_qt.exe.
+    // A plain gmic_qt / gmic_qt.exe on PATH is also accepted as a fallback so
+    // that users who have a system-installed gmic-qt can still use it.
 #ifdef Q_OS_WIN
-    const QString gmicBinName = "gmic_qt.exe";
+    const QString gmicBinName         = "gmic_photoflare_qt.exe";
+    const QString gmicBinNameFallback  = "gmic_qt.exe";
 #else
-    const QString gmicBinName = "gmic_qt";
+    const QString gmicBinName         = "gmic_photoflare_qt";
+    const QString gmicBinNameFallback  = "gmic_qt";
 #endif
     QString gmicBin = QDir(QCoreApplication::applicationDirPath()).filePath(gmicBinName);
     if (!QFile::exists(gmicBin)) {
-        // Try PATH
-        gmicBin = gmicBinName;
-        if (QStandardPaths::findExecutable(gmicBinName).isEmpty()) {
+        // Try the namespaced name on PATH, then the plain upstream name.
+        if (!QStandardPaths::findExecutable(gmicBinName).isEmpty()) {
+            gmicBin = gmicBinName;
+        } else if (!QStandardPaths::findExecutable(gmicBinNameFallback).isEmpty()) {
+            gmicBin = gmicBinNameFallback;
+        } else {
             QMessageBox::warning(this, tr("G'MIC-Qt"),
-                tr("gmic_qt not found. Please install G'MIC-Qt or place the gmic_qt binary next to photoflare."));
+                tr("gmic_photoflare_qt not found. Please install G'MIC-Qt or place the gmic_photoflare_qt binary next to photoflare."));
             QFile::remove(inputPath);
             return;
         }
