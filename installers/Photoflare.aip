@@ -759,6 +759,7 @@
     <ROW Feature_="MainProgram" Component_="IM_MOD_RL_xwd_.dll"/>
     <ROW Feature_="MainProgram" Component_="IM_MOD_RL_yuv_.dll"/>
     <ROW Feature_="MainProgram" Component_="PhotoFlare.exe"/>
+    <ROW Feature_="MainProgram" Component_="gmic_qt.exe"/>
     <ROW Feature_="MainProgram" Component_="ProductInformation"/>
     <ROW Feature_="MainProgram" Component_="Qt6Core.dll"/>
     <ROW Feature_="MainProgram" Component_="Qt6Gui.dll"/>

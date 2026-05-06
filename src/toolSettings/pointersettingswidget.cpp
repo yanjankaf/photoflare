@@ -127,7 +127,7 @@ void PointerSettingsWidget::saveSettings() const
 
 void PointerSettingsWidget::loadSettings()
 {
-    ui->checkBoxStroke->setChecked(SETTINGS->value("toolSettings/pointer/stroke", true).toBool());
+    ui->checkBoxStroke->setChecked(SETTINGS->value("toolSettings/pointer/stroke", false).toBool());
     ui->checkBoxFill->setChecked(SETTINGS->value("toolSettings/pointer/fill", false).toBool());
     ui->strokeWidth->setValue(SETTINGS->value("toolSettings/pointer/strokeWidth", 1).toInt());
     const QString sel = SETTINGS->value("toolSettings/pointer/selection", "rect").toString();

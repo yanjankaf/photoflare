@@ -233,8 +233,8 @@ for(tsfile, TRANSLATIONS) {
     !exists($$qmdir) {
         mkpath($$qmdir)|error("Aborting.")
     }
-    #command = $$LRELEASE -removeidentical $$tsfile -qm $$qmfile
-    #system($$command)|error("Failed to run: $$command")
+    command = $$LRELEASE -removeidentical $$tsfile -qm $$qmfile
+    system($$command)|error("Failed to run: $$command")
     TRANSLATIONS_FILES += $$qmfile
 }
 

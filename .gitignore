@@ -7,6 +7,9 @@ moc_*.cpp
 ui_*.h
 debian/.debhelper/*
 debian/photoflare/*
+installers/PhotoFlare_Win_AIP
+installers/Photoflare-SetupFiles
+installers/Photoflare-cache
 parts/
 prime/
 snap/.snapcraft/
