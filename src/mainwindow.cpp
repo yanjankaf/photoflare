@@ -3818,4 +3818,6 @@ void MainWindow::applyIconTheme()
     ui->toolButtonStamp->setIcon(QIcon(iconPath(":/toolpalette/assets/toolpalette_icons/Stamp.png", dark)));
     ui->toolButtonPaintBucket->setIcon(QIcon(iconPath(":/toolpalette/assets/toolpalette_icons/Bucket.png", dark)));
     ui->toolButtonDropper->setIcon(QIcon(iconPath(":/toolpalette/assets/toolpalette_icons/ColourPicker.png", dark)));
+    if (m_ptSettingsWidget)
+        m_ptSettingsWidget->setIconTheme(dark);
 }

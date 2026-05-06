@@ -35,6 +35,19 @@ PointerSettingsWidget::~PointerSettingsWidget()
     delete ui;
 }
 
+void PointerSettingsWidget::setIconTheme(bool dark)
+{
+    auto p = [dark](const char *name) {
+        QString path = QStringLiteral(":/icons/assets/icons/selections/") + QLatin1String(name);
+        if (dark)
+            path.replace(QLatin1String(":/icons/"), QLatin1String(":/icons-dark/"));
+        return QIcon(path);
+    };
+    ui->square_sel->setIcon(p("square_sel.png"));
+    ui->circle_sel->setIcon(p("circle_sel.png"));
+    ui->lasso_sel->setIcon(p("lasso_sel.png"));
+}
+
 void PointerSettingsWidget::changeEvent(QEvent *e)
 {
     QWidget::changeEvent(e);

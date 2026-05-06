@@ -39,6 +39,7 @@ public:
     bool selectionIsLasso() const;
     void saveSettings() const;
     void loadSettings();
+    void setIconTheme(bool dark);
 
 signals:
     void settingsChanged();
