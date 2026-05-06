@@ -40,6 +40,7 @@ Compile using either by opening the .pro file with Qt Creator or use qmake passi
 ```bash
 git submodule update --init --recursive
 bash external/build_gmic_photoflare_qt.sh
+```
 
 Full instructions for each platform <a href="https://photoflare.io/contributing/building-the-source/">available here</a>
 
