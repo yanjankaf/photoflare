@@ -154,7 +154,7 @@ cmake "$GMIC_QT_SRC" \
 
 echo ""
 echo "=== Building gmic-qt ==="
-cmake --build "$BUILD_DIR" --parallel
+cmake --build "$BUILD_DIR" --parallel 1
 
 echo ""
 echo "=== Renaming to gmic_photoflare_qt ==="
