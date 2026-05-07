@@ -42,19 +42,18 @@
         },
         {
             "name": "gmic-qt",
-            "x-todo": "GMIC_PATH assumes the Flatpak build path /run/build/gmic-qt/gmic/src set by the dest field on the gmic source entry.",
-            "buildsystem": "cmake-ninja",
-            "post-install": [
+            "buildsystem": "simple",
+            "build-options": {
+                "x-note": "network:true is needed to fetch CImg.h and gmic_stdlib_community.h which are not in the gmic git repo. Not suitable for Flathub submission.",
+                "network": true
+            },
+            "build-commands": [
+                "wget --no-check-certificate --quiet -O gmic/src/CImg.h https://github.com/GreycLab/CImg/raw/v.3.7.5/CImg.h",
+                "make -C gmic/src gmic_stdlib_community.h",
+                "cmake . -B _build -DBUILD_WITH_QT6=ON -DGMIC_QT_HOST=none -DENABLE_SYSTEM_GMIC=OFF -DGMIC_PATH=/run/build/gmic-qt/gmic/src -DENABLE_FFTW3=ON -DENABLE_CURL=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXE_LINKER_FLAGS=-no-pie",
+                "cmake --build _build --parallel 1",
+                "cmake --install _build --prefix /app",
                 "mv /app/bin/gmic_qt /app/bin/gmic_photoflare_qt"
-            ],
-            "config-opts": [
-                "-DBUILD_WITH_QT6=ON",
-                "-DGMIC_QT_HOST=none",
-                "-DENABLE_SYSTEM_GMIC=OFF",
-                "-DGMIC_PATH=/run/build/gmic-qt/gmic/src",
-                "-DENABLE_FFTW3=ON",
-                "-DENABLE_CURL=ON",
-                "-DCMAKE_BUILD_TYPE=Release"
             ],
             "sources": [
                 {

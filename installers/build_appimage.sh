@@ -79,6 +79,29 @@ if [[ ! -d "$GMIC_QT_CLONE" ]]; then
     git clone --depth 1 --branch v.3.7.5 https://github.com/GreycLab/gmic.git "$GMIC_QT_CLONE/gmic"
 fi
 
+# Pre-fetch CImg.h from the matching versioned tag — the gmic Makefile's CImg.h
+# target downloads from master (latest) which may not match the pinned gmic version.
+GMIC_SRC="$GMIC_QT_CLONE/gmic/src"
+GMIC_VER=$(grep -oP '(?<=gmic_version )\d+' "$GMIC_SRC/gmic.h")
+CIMG_TAG="v.${GMIC_VER:0:1}.${GMIC_VER:1:1}.${GMIC_VER:2:1}"
+if [[ ! -f "$GMIC_SRC/CImg.h" ]]; then
+    echo "  Downloading CImg.h at tag $CIMG_TAG ..."
+    wget --no-check-certificate --quiet -O "$GMIC_SRC/CImg.h" \
+        "https://github.com/GreycLab/CImg/raw/${CIMG_TAG}/CImg.h"
+fi
+if [[ ! -f "$GMIC_SRC/gmic_stdlib_community.h" ]]; then
+    echo "  Generating gmic_stdlib_community.h ..."
+    make -C "$GMIC_SRC" gmic_stdlib_community.h
+fi
+
+# Ensure lrelease (Qt6) is on PATH for the gmic-qt translations Makefile
+if ! command -v lrelease &>/dev/null && ! command -v lrelease-qt5 &>/dev/null; then
+    QT6_LRELEASE=$(find /usr/lib/qt6/bin /usr/lib/x86_64-linux-gnu/qt6/bin \
+                        /opt/qt6/bin /usr/local/lib/qt6/bin \
+                        -name "lrelease" 2>/dev/null | head -1 || true)
+    [[ -n "$QT6_LRELEASE" ]] && export PATH="$(dirname "$QT6_LRELEASE"):$PATH"
+fi
+
 cmake "$GMIC_QT_CLONE" -B "$GMIC_QT_BUILD" \
     $CMAKE_PREFIX \
     -DBUILD_WITH_QT6=ON \
