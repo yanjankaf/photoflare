@@ -150,6 +150,7 @@ cmake "$GMIC_QT_SRC" \
     -DENABLE_FFTW3=ON \
     -DENABLE_CURL=ON \
     -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_EXE_LINKER_FLAGS="-no-pie" \
     "${CMAKE_EXTRA_ARGS[@]}"
 
 echo ""
