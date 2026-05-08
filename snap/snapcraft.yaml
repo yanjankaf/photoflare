@@ -38,7 +38,6 @@ parts:
     source: https://github.com/c-koi/gmic-qt.git
     source-type: git
     source-tag: v.3.4.2
-    source-commit: aa4a6f4ab174b37fcdf4df5f94fde0898856523a
     plugin: cmake
     cmake-parameters:
       - -DBUILD_WITH_QT6=ON
