@@ -169,6 +169,7 @@ void PrefsDialog::on_buttonBox_accepted()
 
     //Layout tab
     SETTINGS->setDockLayout(QString::number(ui->toolPaletteLocation->currentIndex()));
+    emit dockLayoutChanged();
     SETTINGS->setZoomDirection(QString::number(ui->zoomDirection->currentIndex()));
     {
         static const char* themeKeys[] = {"auto", "light", "dark"};

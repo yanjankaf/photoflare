@@ -47,6 +47,7 @@ private slots:
 signals:
     void iconThemeChanged();
     void languageChanged(const QString &langCode);
+    void dockLayoutChanged();
 
 private:
     Ui::PrefsDialog *ui;

@@ -2385,6 +2385,7 @@ void MainWindow::on_actionPreferences_triggered()
     prefsDialog = new PrefsDialog(this);
     QObject::connect(prefsDialog, SIGNAL(iconThemeChanged()), this, SLOT(applyIconTheme()));
     QObject::connect(prefsDialog, &PrefsDialog::languageChanged, this, &MainWindow::onLanguageChanged);
+    QObject::connect(prefsDialog, &PrefsDialog::dockLayoutChanged, this, &MainWindow::onDockLayoutChanged);
     prefsDialog->show();
 }
 
@@ -2410,6 +2411,20 @@ void MainWindow::loadTranslator(const QString &langCode)
 void MainWindow::onLanguageChanged(const QString &langCode)
 {
     loadTranslator(langCode);
+}
+
+void MainWindow::onDockLayoutChanged()
+{
+    if(SETTINGS->getDockLayout() == "1")
+    {
+        addDockWidget(Qt::LeftDockWidgetArea, ui->dockWidget_palette);
+        addDockWidget(Qt::LeftDockWidgetArea, ui->dockWidgetSettings);
+    }
+    else
+    {
+        addDockWidget(Qt::RightDockWidgetArea, ui->dockWidget_palette);
+        addDockWidget(Qt::RightDockWidgetArea, ui->dockWidgetSettings);
+    }
 }
 
 void MainWindow::changeEvent(QEvent *e)

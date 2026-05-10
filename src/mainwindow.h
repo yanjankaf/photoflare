@@ -256,6 +256,7 @@ private slots:
     void getPrevZoomFromScale(QString scaletext);
 
     void onLanguageChanged(const QString &langCode);
+    void onDockLayoutChanged();
 
 protected:
     void closeEvent(QCloseEvent *event);
