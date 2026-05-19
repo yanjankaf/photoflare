@@ -140,10 +140,11 @@ MainWindow::MainWindow() :
     FilterManager::instance();
 
     ui->setupUi(this);
-    applyIconTheme();
 
     // Add Settings Widgets to the Dock
     addSettingsWidgets();
+
+    applyIconTheme();
 
     // Connect signals to the various Tools
     connectTools();
