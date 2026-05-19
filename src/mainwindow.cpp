@@ -41,6 +41,7 @@
 #include <QProcess>
 #include <QTemporaryFile>
 #include <QDir>
+#include <QSortFilterProxyModel>
 #include <QStandardPaths>
 
 #include "./tools/PaintBrushTool.h"
@@ -738,9 +739,25 @@ void MainWindow::on_actionOpen_triggered()
     "RAW (*.raw *.rw2)"));
 */
 
+    // Proxy model that filters out dot-prefixed files/dirs cross-platform.
+    // QDir::Hidden is not used because on Windows it matches the OS hidden
+    // attribute, not dot-prefixed names.
+    class HideDotFilesProxy : public QSortFilterProxyModel {
+    public:
+        using QSortFilterProxyModel::QSortFilterProxyModel;
+    protected:
+        bool filterAcceptsRow(int row, const QModelIndex &parent) const override {
+            const QString name = sourceModel()
+                ->data(sourceModel()->index(row, 0, parent), Qt::DisplayRole)
+                .toString();
+            return !name.startsWith(QLatin1Char('.'));
+        }
+    };
+
     QFileDialog dialog(this, tr("Open File"), SETTINGS->getOpenFolder(), filters);
     dialog.setFileMode(QFileDialog::ExistingFiles);
     dialog.setOption(QFileDialog::DontUseNativeDialog, true);
+    dialog.setProxyModel(new HideDotFilesProxy(&dialog));
 
     // Add an image preview panel to the right side of the dialog layout
     QLabel *previewLabel = new QLabel(tr("No Preview"), &dialog);
